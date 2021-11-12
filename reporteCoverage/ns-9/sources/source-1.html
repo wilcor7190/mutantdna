@@ -1,0 +1,180 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > MutantDNAServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.mercadolibre.mutant.mutantdna.service.impl</a>
+</div>
+
+<h1>Coverage Summary for Class: MutantDNAServiceImpl (com.mercadolibre.mutant.mutantdna.service.impl)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MutantDNAServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    86,7%
+  </span>
+  <span class="absValue">
+    (13/15)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">MutantDNAServiceImpl$$EnhancerByMockitoWithCGLIB$$c8c88afb</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    86,7%
+  </span>
+  <span class="absValue">
+    (13/15)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package com.mercadolibre.mutant.mutantdna.service.impl;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+<i class="no-highlight">4</i>&nbsp;import org.springframework.stereotype.Service;
+<i class="no-highlight">5</i>&nbsp;
+<i class="no-highlight">6</i>&nbsp;import com.mercadolibre.mutant.mutantdna.domain.RequestMutantADN;
+<i class="no-highlight">7</i>&nbsp;import com.mercadolibre.mutant.mutantdna.domain.ResponseMutantADN;
+<i class="no-highlight">8</i>&nbsp;import com.mercadolibre.mutant.mutantdna.service.MutantDNAService;
+<i class="no-highlight">9</i>&nbsp;import com.mercadolibre.mutant.mutantdna.service.impl.dataproviders.AdnMutantProvider;
+<i class="no-highlight">10</i>&nbsp;import com.mercadolibre.mutant.mutantdna.process.Process;
+<i class="no-highlight">11</i>&nbsp;import com.mercadolibre.mutant.mutantdna.process.run.ProcessDNAArray;
+<i class="no-highlight">12</i>&nbsp;import com.mercadolibre.mutant.mutantdna.entity.Dna;
+<i class="no-highlight">13</i>&nbsp;
+<i class="no-highlight">14</i>&nbsp;import lombok.extern.slf4j.Slf4j;
+<i class="no-highlight">15</i>&nbsp;import reactor.core.publisher.Mono;
+<i class="no-highlight">16</i>&nbsp;
+<i class="no-highlight">17</i>&nbsp;import com.mercadolibre.mutant.mutantdna.exception.AdnNoMutant;
+<i class="no-highlight">18</i>&nbsp;
+<i class="no-highlight">19</i>&nbsp;/**
+<i class="no-highlight">20</i>&nbsp; * Clase servicio donde se invoca para que procese el adn y guarde a la BD el adn.
+<i class="no-highlight">21</i>&nbsp; * @author william corredor - MercadoLibre - prueba adn mutante
+<i class="no-highlight">22</i>&nbsp; * @date 5/11/2021
+<i class="no-highlight">23</i>&nbsp; * @since 1.0
+<i class="no-highlight">24</i>&nbsp; */
+<i class="no-highlight">25</i>&nbsp;@Service
+<b class="fc"><i class="no-highlight">26</i>&nbsp;@Slf4j</b>
+<b class="fc"><i class="no-highlight">27</i>&nbsp;public class MutantDNAServiceImpl implements MutantDNAService {</b>
+<i class="no-highlight">28</i>&nbsp;
+<i class="no-highlight">29</i>&nbsp;	@Autowired
+<i class="no-highlight">30</i>&nbsp;	private AdnMutantProvider db;
+<i class="no-highlight">31</i>&nbsp;
+<i class="no-highlight">32</i>&nbsp;	/**
+<i class="no-highlight">33</i>&nbsp;	 * metodo para procesar el adn y validar si es mutante y a su vez guardar el adn.
+<i class="no-highlight">34</i>&nbsp;	 * @param request valor donde se encuentra el adn
+<i class="no-highlight">35</i>&nbsp;	 * @return
+<i class="no-highlight">36</i>&nbsp;	 */
+<i class="no-highlight">37</i>&nbsp;	@Override
+<i class="no-highlight">38</i>&nbsp;	public Mono&lt;ResponseMutantADN&gt; isMutant(RequestMutantADN request) {
+<b class="fc"><i class="no-highlight">39</i>&nbsp;		log.info(&quot;validar dna mutante&quot;);</b>
+<i class="no-highlight">40</i>&nbsp;
+<b class="fc"><i class="no-highlight">41</i>&nbsp;		Process process = new ProcessDNAArray();</b>
+<b class="fc"><i class="no-highlight">42</i>&nbsp;		boolean isMutant = process.processDNA(request);</b>
+<i class="no-highlight">43</i>&nbsp;
+<b class="fc"><i class="no-highlight">44</i>&nbsp;		log.info(&quot;Dna procesado, resultado: &quot; + (isMutant ? &quot;mutant&quot; : &quot;human&quot;));</b>
+<i class="no-highlight">45</i>&nbsp;
+<i class="no-highlight">46</i>&nbsp;		try {
+<i class="no-highlight">47</i>&nbsp;
+<b class="fc"><i class="no-highlight">48</i>&nbsp;			log.info(&quot;Invocando la BD&quot;);</b>
+<b class="fc"><i class="no-highlight">49</i>&nbsp;			db.addDNASequence(new Dna(request.getDna(), isMutant));</b>
+<b class="fc"><i class="no-highlight">50</i>&nbsp;			log.info(&quot;la secuancia de datos fue guardada correctamente&quot;);</b>
+<i class="no-highlight">51</i>&nbsp;
+<b class="nc"><i class="no-highlight">52</i>&nbsp;		} catch (Exception e) {</b>
+<b class="nc"><i class="no-highlight">53</i>&nbsp;			log.error(&quot;Error ocurred invoking database service: &quot; + e);</b>
+<i class="no-highlight">54</i>&nbsp;
+<b class="fc"><i class="no-highlight">55</i>&nbsp;		}</b>
+<i class="no-highlight">56</i>&nbsp;
+<b class="fc"><i class="no-highlight">57</i>&nbsp;		if (isMutant == true) {</b>
+<b class="fc"><i class="no-highlight">58</i>&nbsp;			return Mono.just(ResponseMutantADN.builder().isMutant(isMutant).build());</b>
+<i class="no-highlight">59</i>&nbsp;		} else {
+<b class="fc"><i class="no-highlight">60</i>&nbsp;			return Mono.error(new AdnNoMutant(isMutant ? &quot;Positiva&quot; : &quot;Negativa&quot;));</b>
+<i class="no-highlight">61</i>&nbsp;		}
+<i class="no-highlight">62</i>&nbsp;
+<i class="no-highlight">63</i>&nbsp;	}
+<i class="no-highlight">64</i>&nbsp;
+<i class="no-highlight">65</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-11-11 19:42</div>
+</div>
+</body>
+</html>
