@@ -13,5 +13,5 @@ mongodb:
 
 application.app.api.path: /genetics/v1.0/mutantadn
 spring.data.mongodb.auto-index-creation: true
-spring.data.mongodb.Host: mongo
+spring.data.mongodb.Host: 127.0.0.1
 spring.data.mongodb.port: 27017
